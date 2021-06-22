@@ -21,10 +21,10 @@ def setup_browser():
     browser = webdriver.Chrome(executable_path=PATH, options=options)
     return browser
 
-def search(cards, browser):
+def search(card, browser):
     """
-    search and print infos for cards given.
-    cards = list of cards to search for.
+    search and print infos for card given.\n
+    card = card name in HTML notation.\n
     browser = webdriver object
     """
     # data for later URL
@@ -34,35 +34,35 @@ def search(cards, browser):
     today = datetime.date.today()
     print(today)
 
-    # looping the cards in list and searching for the card and price infos.
-    for card in cards:
-        # setting up the url
-        url = base_url + card + filter_url
+    
+    # setting up the url
+    url = base_url + card + filter_url
 
-        try:
-            # calling the url
-            browser.get(url)
-            time.sleep(0.1)
+    try:
+        # calling the url
+        browser.get(url)
+        time.sleep(0.1)
 
-            # searching the site for name of the card, the trend-price and offers.
-            name = browser.find_element_by_css_selector("body > main > div.page-title-container.d-flex.align-items-center > div > h1")
-            price = browser.find_element_by_css_selector('#info > div > dl > dd:nth-child(8) > span')
-            table = browser.find_element_by_css_selector("#table > div > div.table-body")
+        # searching the site for name of the card, the trend-price and offers.
+        name = browser.find_element_by_css_selector("body > main > div.page-title-container.d-flex.align-items-center > div > h1")
+        price = browser.find_element_by_css_selector('#info > div > dl > dd:nth-child(8) > span')
+        table = browser.find_element_by_css_selector("#table > div > div.table-body")
 
-            # splitting the table of offers in a list. searching for the first price in list.
-            table_list = table.text.split("\n")
-            for item in table_list:
-                if "€" in item:
-                    best_price = item
-                    break
-            
-            print(f"{name.text} - Preistrend: {price.text} - Bester Preis: {best_price}")
+        # splitting the table of offers in a list. searching for the first price in list.
+        table_list = table.text.split("\n")
+        for item in table_list:
+            if "€" in item:
+                best_price = item
+                break
         
-        except Exception:
-            print(f"There was an exception occuring, while searching for: {card}.")
-        
-    browser.quit()
+        print(f"{name.text} - Preistrend: {price.text} - Bester Preis: {best_price}")
+    
+    except Exception:
+        print(f"There was an exception occuring, while searching for: {card}.")
+    finally:        
+        browser.quit()
 
 # control execution
 if __name__ == "__main__":
-    search(cards, setup_browser())
+    for card in cards:
+        search(card, setup_browser())
