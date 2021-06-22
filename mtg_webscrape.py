@@ -1,5 +1,5 @@
-import time
-import datetime
+import time, datetime
+import json
 
 from selenium import webdriver
 from bs4 import BeautifulSoup
@@ -12,6 +12,9 @@ cards = [
     "Scalding-Tarn"
 ]
 
+test_file = "test.json"
+
+
 def setup_browser():
     """setting up the browser and return webdriver object."""
     PATH = "C:\Program Files (x86)\chromedriver.exe"
@@ -21,12 +24,15 @@ def setup_browser():
     browser = webdriver.Chrome(executable_path=PATH, options=options)
     return browser
 
+
 def search(card, browser):
     """
     search and print infos for card given.\n
     card = card name in HTML notation.\n
     browser = webdriver object
     """
+    info = {}
+    
     # data for later URL
     base_url = "https://www.cardmarket.com/de/Magic/Cards/"
     filter_url = "?sellerCountry=7&language=1"
@@ -56,13 +62,43 @@ def search(card, browser):
                 break
         
         print(f"{name.text} - Preistrend: {price.text} - Bester Preis: {best_price}")
+
+        info[card] = {
+            "name": name.text,
+            "price": price.text,
+            "best_price": best_price
+        }
     
     except Exception:
         print(f"There was an exception occuring, while searching for: {card}.")
     finally:        
         browser.quit()
+    
+    return info
+
+
+def save(file, card_infos):
+    """
+    saving data to file.\n
+    file = string path/to/file\n
+    card_infos = infos to save
+    """
+    try:
+        with open(file, "w") as save_file:
+            save_file.write(json.dumps(card_infos))
+    except FileNotFoundError:
+        print(f"File not found! - {file}")
+    else:
+        print(f"Data saved to: {file}")
+    
 
 # control execution
 if __name__ == "__main__":
+    card_infos = {}
     for card in cards:
-        search(card, setup_browser())
+        info = search(card, setup_browser())
+        for key in info.keys():
+            card_infos[key] = info[key]
+    
+    print(card_infos)
+    save(test_file, card_infos)
