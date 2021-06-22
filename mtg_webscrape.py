@@ -5,26 +5,32 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 
 
-def search():
-    """search and print infos for cards given."""
+# list of cards to search. names have to be in html notation.
+cards = [
+    "Yavimaya-Cradle-of-Growth",
+    "Misty-Rainforest",
+    "Scalding-Tarn"
+]
 
-    # setting up the browser, headless mode deactivates displaying browser.
+def setup_browser():
+    """setting up the browser and return webdriver object."""
     PATH = "C:\Program Files (x86)\chromedriver.exe"
     options = webdriver.ChromeOptions()
+    # headless mode deactivates displaying browser.
     options.add_argument("headless")
     browser = webdriver.Chrome(executable_path=PATH, options=options)
+    return browser
 
+def search(cards, browser):
+    """
+    search and print infos for cards given.
+    cards = list of cards to search for.
+    browser = webdriver object
+    """
     # data for later URL
     base_url = "https://www.cardmarket.com/de/Magic/Cards/"
     filter_url = "?sellerCountry=7&language=1"
-
-    # list of cards to search. names have to be in html notation.
-    cards = [
-        "Yavimaya-Cradle-of-Growth",
-        "Misty-Rainforest",
-        "Scalding-Tarn"
-    ]
-
+    
     today = datetime.date.today()
     print(today)
 
@@ -59,6 +65,4 @@ def search():
 
 # control execution
 if __name__ == "__main__":
-    print("Hello")
-    search()
-    # Test
+    search(cards, setup_browser())
