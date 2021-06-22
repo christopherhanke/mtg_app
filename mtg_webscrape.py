@@ -9,7 +9,8 @@ from bs4 import BeautifulSoup
 cards = [
     "Yavimaya-Cradle-of-Growth",
     "Misty-Rainforest",
-    "Scalding-Tarn"
+    "Scalding-Tarn",
+    "Svyelun-of-Sea-and-Sky"
 ]
 
 test_file = "test.json"
@@ -63,6 +64,8 @@ def search(card, browser):
         
         print(f"{name.text} - Preistrend: {price.text} - Bester Preis: {best_price}")
 
+        #TODO - getting price to float
+
         info[card] = {
             "name": name.text,
             "price": price.text,
@@ -79,8 +82,8 @@ def search(card, browser):
 
 def save(file, card_infos):
     """
-    saving data to file.\n
-    file = string path/to/file\n
+    saving data to file. \n
+    file = string path\\to\\file \n
     card_infos = infos to save
     """
     try:
