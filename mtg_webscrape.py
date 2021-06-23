@@ -38,10 +38,6 @@ def search(card, browser):
     base_url = "https://www.cardmarket.com/de/Magic/Cards/"
     filter_url = "?sellerCountry=7&language=1"
     
-    today = datetime.date.today()
-    print(today)
-
-    
     # setting up the url
     url = base_url + card + filter_url
 
@@ -93,15 +89,41 @@ def save(file, card_infos):
         print(f"File not found! - {file}")
     else:
         print(f"Data saved to: {file}")
+
+
+def load(file):
+    """
+    load file to programm and return data in dict.\n
+    file = string path\\to\\file
+    """
+    try:
+        with open(file, "r") as save_file:
+            card_infos = json.loads(save_file.read())
+    except FileNotFoundError:
+        print(f"File not found! - {file}")
+        return None
+    else:
+        print(f"Data read from: {file}")
+
+    return card_infos
     
 
 # control execution
 if __name__ == "__main__":
+    data = load(test_file)
     card_infos = {}
-    for card in cards:
-        info = search(card, setup_browser())
-        for key in info.keys():
-            card_infos[key] = info[key]
+
+    today = datetime.date.today()
+    print(today)
+
+    if data:
+        for card in data.keys():
+            info = search(card, setup_browser())
+            for key in info.keys():
+                card_infos[key] = info[key]
     
-    print(card_infos)
-    save(test_file, card_infos)
+        print(card_infos)
+        save(test_file, card_infos)
+
+    else:
+        print("There was an error.")
