@@ -60,12 +60,10 @@ def search(card, browser):
         
         print(f"{name.text} - Preistrend: {price.text} - Bester Preis: {best_price}")
 
-        #TODO - getting price to float
-
         info[card] = {
             "name": name.text,
-            "price": price.text,
-            "best_price": best_price
+            "price": price_text_to_float(price.text),
+            "best_price": price_text_to_float(best_price)
         }
     
     except Exception:
@@ -74,6 +72,26 @@ def search(card, browser):
         browser.quit()
     
     return info
+
+def price_text_to_float(text):
+    """
+    converting the text price to a float
+    text format to convert **,** €
+    """
+
+    # strip currency from numbers
+    numbers_text = text.split()[0]
+    
+    # split numbers on comma (german float notation)
+    numbers = numbers_text.split(',')
+
+    # reassign text
+    try:
+        price = float(numbers[0] + "." + numbers[1])
+    except ValueError:
+        print(numbers)
+        return None
+    return price
 
 
 def save(file, card_infos):
