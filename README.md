@@ -5,3 +5,7 @@ This repository is a little project of mine. I'll develop this application over 
 **First approach**
 
 Getting data related to MtG Cards from a second market webshop. Data shall be further used. Test case is printing them to command line.
+
+**Second step**
+
+Test cases are stored in json file for further usage. For now data will be replaced on execution. Further development to adding new information to data.
