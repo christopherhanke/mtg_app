@@ -13,7 +13,7 @@ else:
             "price": 10.07, 
             "best_price": 11.0
         })
-if db.search(where("card") == "Nebliger Regenwald"):
+if db.search(User.card == "Nebliger Regenwald"):
     print("Search succesfull")
 else:
     db.insert(
@@ -23,7 +23,8 @@ else:
             "price": 26.29, 
             "best_price": 31.2
         })
-print(db.all())
 
-#print(db.get(User.card == "Yavimaya, Wiege des Wachstums").doc_id)
+db.update({"price": 0}, User.card == "Nebliger Regenwald")
+
+print(db.get(User.card == "Yavimaya, Wiege des Wachstums").doc_id)
 print(db.get(doc_id=2))

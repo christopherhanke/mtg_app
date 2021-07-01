@@ -1,11 +1,1 @@
-{
-    "_default": {
-        "1": {
-            "card": "Yavimaya, Wiege des Wachstums", "html_tag": "Yavimaya-Cradle-of-Growth", "price": 10.07, "best_price": 11.0
-        }, 
-        
-        "2": {
-            "html_tag": "Misty-Rainforest", "card": "Nebliger Regenwald", "price": 26.29, "best_price": 31.2
-        }
-    }
-}
+{"_default": {"1": {"card": "Yavimaya, Wiege des Wachstums", "html_tag": "Yavimaya-Cradle-of-Growth", "price": 10.07, "best_price": 11.0}, "2": {"html_tag": "Misty-Rainforest", "card": "Nebliger Regenwald", "price": 26.29, "best_price": 31.2}}}
