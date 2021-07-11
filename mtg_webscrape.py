@@ -102,7 +102,7 @@ def save(file, card_infos):
     """
     try:
         with open(file, "w") as save_file:
-            save_file.write(json.dumps(card_infos))
+            save_file.write(json.dumps(card_infos, sort_keys=True, indent=4, separators=(",", ": ")))
     except FileNotFoundError:
         print(f"File not found! - {file}")
     else:
