@@ -78,8 +78,6 @@ class Database():
                 {"price": card_price, "best_price": card_best_price, "date": card_date},
                 where("card") == name
             )
-        
-        print(card.get("price"))
 
 
 # control execution
