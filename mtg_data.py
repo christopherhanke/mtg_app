@@ -7,7 +7,7 @@ class Database():
     """
 
     db = TinyDB("db.json")
-    Card = Query()
+    c_query = Query()
 
     def get_cards(self):
         """returns list of cards in database"""
@@ -21,11 +21,9 @@ class Database():
         """
         set card in database\n
         """
-        # check if card is yet in database
+        # check if card is yet in database, if then update
         if name in self.get_cards():
-            print("found")
-
-            # TODO - implement update
+            self.update_card(name, price, best_price)
         
         # if card is not yet in database insert it
         else:
@@ -38,11 +36,20 @@ class Database():
                 }
             )
 
+    def update_card(self, name, price, best_price):
+        """
+        update card in database\n
+        """
+        # print(self.db.search(self.c_query.card == name))
+        self.db.update({"price": price, "best_price": best_price}, self.c_query.card == name)
+        # print(self.db.search(self.c_query.card == name))
+        
 
 
 if __name__ == "__main__":
     db = Database()
     print(db.get_cards())
+    db.update_card("Yavimaya, Wiege des Wachstums", 10.56, 10.00)
 
 
 # if db.search(where("card") == "Yavimaya, Wiege des Wachstums"):
