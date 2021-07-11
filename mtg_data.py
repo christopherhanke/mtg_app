@@ -17,6 +17,17 @@ class Database():
         
         return cards
 
+    def get_card(self, name):
+        """
+        get card out of database by name\n
+        returns item from database or None
+        """
+        items = self.db.search(self.c_query.card == name)
+        if len(items) > 0:
+            return items[0]
+        else:
+            return None
+
     def set_card(self, name, html_tag, price, best_price):
         """
         set card in database\n
@@ -40,9 +51,8 @@ class Database():
         """
         update card in database\n
         """
-        # print(self.db.search(self.c_query.card == name))
-        self.db.update({"price": price, "best_price": best_price}, self.c_query.card == name)
-        # print(self.db.search(self.c_query.card == name))
+        # self.db.update({"price": price, "best_price": best_price}, self.c_query.card == name)
+        self.db.update({"price": price, "best_price": best_price}, where("card") == name)
         
 
 
@@ -50,7 +60,7 @@ if __name__ == "__main__":
     db = Database()
     print(db.get_cards())
     db.update_card("Yavimaya, Wiege des Wachstums", 10.56, 10.00)
-
+    print(db.db.get(doc_id=1))
 
 # if db.search(where("card") == "Yavimaya, Wiege des Wachstums"):
 #     print("Search succesfull")
