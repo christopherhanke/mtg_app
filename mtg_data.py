@@ -1,3 +1,4 @@
+import datetime
 from tinydb import TinyDB, Query, where
 
 
@@ -6,7 +7,7 @@ class Database():
     Database model
     """
 
-    db = TinyDB("db.json")
+    db = TinyDB("db.json", sort_keys=True, indent=4, separators=(",", ": "))
     c_query = Query()
 
     def get_cards(self):
@@ -42,8 +43,9 @@ class Database():
                 {
                     "card": name,
                     "html_tag": html_tag,
-                    "price": price,
-                    "best_price": best_price
+                    "price": [price],
+                    "best_price": [best_price],
+                    "date": [str(datetime.date.today())]
                 }
             )
 
@@ -51,40 +53,44 @@ class Database():
         """
         update card in database\n
         """
-        # self.db.update({"price": price, "best_price": best_price}, self.c_query.card == name)
-        self.db.update({"price": price, "best_price": best_price}, where("card") == name)
+        cards = self.db.search(where("card") == name)
+        if len(cards) > 0:
+            card = cards[0]
+        else:
+            print(f"Card ({name}) not found.")
+            raise Exception
+
+        # check if there is already a value for today, if not write new value
+        if not str(datetime.date.today()) in card.get("date"):
+            print("Datetime is not in list")
+            # get list values from list
+            card_price = card.get("price")
+            card_best_price = card.get("best_price")
+            card_date = card.get("date")
+
+            # append to list new value
+            card_price.append(price)
+            card_best_price.append(best_price)
+            card_date.append(str(datetime.date.today()))
+
+            # update database with new lists
+            self.db.update(
+                {"price": card_price, "best_price": card_best_price, "date": card_date},
+                where("card") == name
+            )
         
+        print(card.get("price"))
 
 
+# control execution
 if __name__ == "__main__":
     db = Database()
+    
+    # Reset to database / uncomment next block if necessary
+    # db.db.truncate()
+    # db.set_card("Yavimaya, Wiege des Wachstums", "Yavimaya-Cradle-of-Growth", 10.56, 10.0)
+    # db.set_card("Nebliger Regenwald", "Misty-Rainforest", 28.74, 30.5)
+    
     print(db.get_cards())
     db.update_card("Yavimaya, Wiege des Wachstums", 10.56, 10.00)
     print(db.db.get(doc_id=1))
-
-# if db.search(where("card") == "Yavimaya, Wiege des Wachstums"):
-#     print("Search succesfull")
-# else:
-#     db.insert(
-#         {
-#             "card": "Yavimaya, Wiege des Wachstums", 
-#             "html_tag": "Yavimaya-Cradle-of-Growth", 
-#             "price": 10.07, 
-#             "best_price": 11.0
-#         })
-# if db.search(Card.card == "Nebliger Regenwald"):
-#     print("Search succesfull")
-# else:
-#     db.insert(
-#         {
-#             "html_tag": "Misty-Rainforest",
-#             "card": "Nebliger Regenwald", 
-#             "price": 26.29, 
-#             "best_price": 31.2
-#         })
-# db.update({"price": 0}, Card.card == "Nebliger Regenwald")
-# print(db.get(Card.card == "Yavimaya, Wiege des Wachstums").doc_id)
-# print(db.get(doc_id=2))
-# print(db.search(Card.card == "Nebliger Regenwald"))
-# for item in db:
-#     print(item["card"])
