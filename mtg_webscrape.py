@@ -3,7 +3,9 @@ import json
 
 from selenium import webdriver
 from bs4 import BeautifulSoup
+from mtg_data import Database
 
+# TODO - import module mtg_data and rework save/load with Database
 
 # list of cards to search. names have to be in html notation.
 cards = [
