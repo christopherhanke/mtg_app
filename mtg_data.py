@@ -90,5 +90,15 @@ if __name__ == "__main__":
     # db.set_card("Nebliger Regenwald", "Misty-Rainforest", 28.74, 30.5)
     
     print(db.get_cards())
-    db.update_card("Yavimaya, Wiege des Wachstums", 10.56, 10.00)
+    # db.update_card("Yavimaya, Wiege des Wachstums", 10.56, 10.00)
     print(db.db.get(doc_id=1))
+    one_card = db.db.get(doc_id=1)
+    one_date = one_card.get("date")
+    print(datetime.datetime.strptime(one_date[0], "%Y-%m-%d"))
+    print(datetime.datetime.now())
+    one_date = one_date[0].split("-")
+    for i in range(len(one_date)):
+        one_date[i] = int(one_date[i])
+    print(datetime.date(one_date[0], one_date[1], one_date[2]))
+    
+    
