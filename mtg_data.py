@@ -78,16 +78,23 @@ class Database():
                 {"price": card_price, "best_price": card_best_price, "date": card_date},
                 where("card") == name
             )
-
+    
+    def __len__(self):
+        """
+        Get the total number of documents in the default table.
+        """
+        return len(self.db)
+    
+    def get_doc_id(self, id):
+        """
+        Get exactly one document specified by a query or a document ID.\n
+        Returns None if the document doesn't exist.
+        """
+        return self.db.get(doc_id=id)
 
 # control execution
 if __name__ == "__main__":
     db = Database()
-    
-    # Reset to database / uncomment next block if necessary
-    # db.db.truncate()
-    # db.set_card("Yavimaya, Wiege des Wachstums", "Yavimaya-Cradle-of-Growth", 10.56, 10.0)
-    # db.set_card("Nebliger Regenwald", "Misty-Rainforest", 28.74, 30.5)
     
     print(db.get_cards())
     # db.update_card("Yavimaya, Wiege des Wachstums", 10.56, 10.00)

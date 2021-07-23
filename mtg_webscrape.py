@@ -100,9 +100,7 @@ def price_text_to_float(text):
 if __name__ == "__main__":
     db = Database()
     
-    for i in range(1, len(db.db)+1):
-        card = db.db.get(doc_id=i)
+    for i in range(1, len(db)+1):
+        card = db.get_doc_id(i)
         card_info = search(card.get("html_tag"), setup_browser())
         db.set_card(card_info.get("name"), card_info.get("html_tag"), card_info.get("price"), card_info.get("best_price"))
-
-
