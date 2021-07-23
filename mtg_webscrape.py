@@ -5,17 +5,15 @@ from selenium import webdriver
 from bs4 import BeautifulSoup
 from mtg_data import Database
 
-# TODO - import module mtg_data and rework save/load with Database
 
 # list of cards to search. names have to be in html notation.
 cards = [
-    "Yavimaya-Cradle-of-Growth",
-    "Misty-Rainforest",
-    "Scalding-Tarn",
-    "Svyelun-of-Sea-and-Sky"
+    # "Yavimaya-Cradle-of-Growth",
+    # "Misty-Rainforest",
+    # "Scalding-Tarn",
+    # "Svyelun-of-Sea-and-Sky",
+    "Cabal-Coffers"
 ]
-
-test_file = "test.json"
 
 
 def setup_browser():
@@ -62,14 +60,16 @@ def search(card, browser):
         
         print(f"{name.text} - Preistrend: {price.text} - Bester Preis: {best_price}")
 
-        info[card] = {
+        info = {
+            "html_tag": card,
             "name": name.text,
             "price": price_text_to_float(price.text),
             "best_price": price_text_to_float(best_price)
         }
     
-    except Exception:
+    except Exception as ex:
         print(f"There was an exception occuring, while searching for: {card}.")
+        print(ex.args)
     finally:        
         browser.quit()
     
@@ -96,54 +96,13 @@ def price_text_to_float(text):
     return price
 
 
-def save(file, card_infos):
-    """
-    saving data to file. \n
-    file = string path\\to\\file \n
-    card_infos = infos to save
-    """
-    try:
-        with open(file, "w") as save_file:
-            save_file.write(json.dumps(card_infos, sort_keys=True, indent=4, separators=(",", ": ")))
-    except FileNotFoundError:
-        print(f"File not found! - {file}")
-    else:
-        print(f"Data saved to: {file}")
-
-
-def load(file):
-    """
-    load file to programm and return data in dict.\n
-    file = string path\\to\\file
-    """
-    try:
-        with open(file, "r") as save_file:
-            card_infos = json.loads(save_file.read())
-    except FileNotFoundError:
-        print(f"File not found! - {file}")
-        return None
-    else:
-        print(f"Data read from: {file}")
-
-    return card_infos
-    
-
 # control execution
 if __name__ == "__main__":
-    data = load(test_file)
-    card_infos = {}
-
-    today = datetime.date.today()
-    print(today)
-
-    if data:
-        for card in data.keys():
-            info = search(card, setup_browser())
-            for key in info.keys():
-                card_infos[key] = info[key]
+    db = Database()
     
-        print(card_infos)
-        save(test_file, card_infos)
+    for i in range(1, len(db.db)+1):
+        card = db.db.get(doc_id=i)
+        card_info = search(card.get("html_tag"), setup_browser())
+        db.set_card(card_info.get("name"), card_info.get("html_tag"), card_info.get("price"), card_info.get("best_price"))
 
-    else:
-        print("There was an error.")
+
