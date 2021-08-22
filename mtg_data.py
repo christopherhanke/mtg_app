@@ -87,7 +87,7 @@ class Database():
     
     def get_doc_id(self, id):
         """
-        Get exactly one document specified by a query or a document ID.\n
+        Get exactly one document specified by a document ID.\n
         Returns None if the document doesn't exist.
         """
         return self.db.get(doc_id=id)
