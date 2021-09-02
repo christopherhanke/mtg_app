@@ -1,5 +1,7 @@
 __pycache__
 /venv
+/.venv
+/.vscode
 venv_command.txt
 test*
 mtg_app.bat
